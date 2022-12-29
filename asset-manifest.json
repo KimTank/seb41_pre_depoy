@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/seb41_pre_depoy/static/css/main.e50d4e20.css",
+    "main.js": "/seb41_pre_depoy/static/js/main.1993fd98.js",
+    "static/js/787.8e095bfd.chunk.js": "/seb41_pre_depoy/static/js/787.8e095bfd.chunk.js",
+    "static/media/logo-stackoverflow.svg": "/seb41_pre_depoy/static/media/logo-stackoverflow.31c85f3f3e17cd6f8a4317581fb7082f.svg",
+    "static/media/icon-star.svg": "/seb41_pre_depoy/static/media/icon-star.bec5404003d2532f4abd94f1e0701f28.svg",
+    "static/media/icon-search.svg": "/seb41_pre_depoy/static/media/icon-search.853c955ddf9df734e10b09b57b7719ee.svg",
+    "index.html": "/seb41_pre_depoy/index.html",
+    "static/media/icon-globe.svg": "/seb41_pre_depoy/static/media/icon-globe.f7a2303927cdc88f2fef9fa80cac2d31.svg",
+    "static/media/logo-glyph-md.svg": "/seb41_pre_depoy/static/media/logo-glyph-md.aa871fbc61d3fd9f19d12720637d661d.svg",
+    "static/media/icon-alertcycle.svg": "/seb41_pre_depoy/static/media/icon-alertcycle.3b9540ce078202df812f19838e27d082.svg",
+    "main.e50d4e20.css.map": "/seb41_pre_depoy/static/css/main.e50d4e20.css.map",
+    "main.1993fd98.js.map": "/seb41_pre_depoy/static/js/main.1993fd98.js.map",
+    "787.8e095bfd.chunk.js.map": "/seb41_pre_depoy/static/js/787.8e095bfd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e50d4e20.css",
+    "static/js/main.1993fd98.js"
+  ]
+}
