@@ -1,5 +1,8 @@
+// import axios from 'axios';
+// import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import QuestionRow from './QuestionRow';
 
 /**
  * Created by @SW
@@ -12,13 +15,33 @@ function Main() {
     Askbtn('/questionCreate');
   };
 
+  // const [QuestionL, SetQuestionL] = useState([]);
+
+  // useEffect(() => {
+  //   axios
+  //     .get('board/posts?page=1&size=3', { withCredentials: true })
+  //     .then((res) => {
+  //       const { data } = res;
+  //       SetQuestionL(data);
+  //     })
+  //     .catch((error) => alert(error));
+  // }, []);
+
   return (
     <MainBody>
       <MainTitle>
         <h2>Top Questions</h2>
         <button onClick={() => handleAskBtn()}>Ask Question</button>
       </MainTitle>
-      <MainQuestionList></MainQuestionList>
+      {/* {QuestionL.map((list) => ( */}
+      <QuestionRow
+      // key={list.id}
+      // id={list.id}
+      // title={list.title}
+      // createdAt={list.createdAt}
+      // tag={list.tag}
+      />
+      {/* ))} */}
     </MainBody>
   );
 }
@@ -51,10 +74,4 @@ const MainTitle = styled.div`
   Button:hover {
     background-color: #0c63a9;
   }
-`;
-const MainQuestionList = styled.div`
-  padding: 100px;
-  margin: 100px;
-  /* 변경ty width: 750px; */
-  width: 700px;
 `;
