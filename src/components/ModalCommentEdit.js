@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { pushDefaultWithToken } from '../util/axiosHelper';
+import { getCOMMENT_EDIT, getPOSTS_DETAIL } from '../util/urlStore';
 import CommonButton, {
   BUTTON_TYPE_USER,
   BUTTON_TYPE_USER_EDIT,
@@ -46,22 +47,30 @@ function ModalCommentEdit({
   };
 
   const handleEdit = () => {
+    console.log(11111111111111);
+    console.log(comment.content);
+
+    console.log(getCOMMENT_EDIT({ postId: postId, commentId: comment.id }));
     axios
       .patch(
-        `${process.env.REACT_APP_EP_COMMENT_EDIT}/${postId}${process.env.REACT_APP_EP_COMMENT}/${comment.id}`,
+        getCOMMENT_EDIT({ postId: postId, commentId: comment.id }),
         {
-          content: comment.content,
+          content: cont,
         },
         pushDefaultWithToken()
       )
-      .then(() => {
+      .then((response) => {
+        console.log(response.data);
+        console.log(getPOSTS_DETAIL({ postId: postId }));
         axios
-          .get(`${process.env.REACT_APP_EP_POSTS_DETAIL}/${postId}`, {
+          .get(getPOSTS_DETAIL({ postId: postId }), {
             withCredentials: true,
           })
           .then((response) => {
             const { data } = response;
-            setPost(data);
+            console.log(data);
+
+            setPost(data.postToPostCommentResponseDto);
             closeModal();
           })
           .catch((error) => alert(error));

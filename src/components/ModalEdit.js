@@ -5,7 +5,8 @@ import Modal from 'react-modal';
 import { ColumnDiv } from '../styles/StyledStore';
 import { pushDefaultWithToken } from '../util/axiosHelper';
 import { regDisplayName } from '../util/regExp';
-import { IS_ALIVE } from '../util/tokenHelper';
+import { getIS_ALIVE } from '../util/tokenHelper';
+import { getUSER_EDIT } from '../util/urlStore';
 import CommonButton, {
   BUTTON_TYPE_USER,
   BUTTON_TYPE_USER_EDIT,
@@ -94,10 +95,10 @@ function ModalEdit({ editModalIsOpen, setIsEditModalOpen, user }) {
     console.log(userName);
     console.log(passwordConfirm);
     console.log(faker.image.avatar());
-    console.log(IS_ALIVE());
+    console.log(getIS_ALIVE());
     axios
       .patch(
-        `${process.env.REACT_APP_EP_USER_EDIT}/${user.id}`,
+        getUSER_EDIT({ userId: user.id }),
         {
           userName: userName,
           userPassword: passwordConfirm,

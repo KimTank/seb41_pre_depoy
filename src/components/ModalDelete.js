@@ -2,13 +2,14 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Modal from 'react-modal';
-import { IS_ALIVE, logout } from '../util/tokenHelper';
+import { getIS_ALIVE, setLOGOUT } from '../util/tokenHelper';
 import { pushDefaultWithToken } from '../util/axiosHelper';
 import CommonButton, {
   BUTTON_TYPE_USER,
   BUTTON_TYPE_USER_DELETE,
 } from './CommonButton';
 import LabelInput from './LabelInput';
+import { getUSER_SIGNOUT } from '../util/urlStore';
 
 const customStyles = {
   content: {
@@ -51,13 +52,10 @@ function ModalDelete({ deleteModalIsOpen, setIsDeleteModalOpen, user }) {
   const handleDelete = () => {
     if (text === verifyPoint) {
       axios
-        .delete(
-          `${process.env.REACT_APP_EP_SIGNOUT}/${user.id}`,
-          pushDefaultWithToken()
-        )
+        .delete(getUSER_SIGNOUT({ userId: user.id }), pushDefaultWithToken())
         .then(() => {
-          logout();
-          if (!IS_ALIVE()) {
+          setLOGOUT();
+          if (!getIS_ALIVE()) {
             alert('Succeed to delete your account, seeya');
             navigate('signin');
             closeModal();

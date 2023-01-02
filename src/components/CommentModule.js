@@ -10,6 +10,9 @@ import CommonButton, {
 } from './CommonButton';
 import ModalCommentDelete from './ModalCommentDelete';
 import ModalCommentEdit from './ModalCommentEdit';
+import { getCOMMENT_CREATE, getPOSTS_DETAIL } from '../util/urlStore';
+import { getIS_ALIVE, getUser } from '../util/tokenHelper';
+import { NONE_IMG } from '../data/dumyData';
 
 /* 
   "comments": [
@@ -52,20 +55,23 @@ function CommentModule({
 
     axios
       .post(
-        `${process.env.REACT_APP_EP_COMMENT_CREATE}/${postId}${process.env.REACT_APP_EP_COMMENT}`,
+        getCOMMENT_CREATE({ postId: postId }),
         {
           content: comment,
         },
         pushDefaultWithToken()
       )
       .then(() => {
+        console.log(getPOSTS_DETAIL({ postId: postId }));
         axios
-          .get(`${process.env.REACT_APP_EP_POSTS_DETAIL}/${postId}`, {
+          .get(getPOSTS_DETAIL({ postId: postId }), {
             withCredentials: true,
           })
           .then((response) => {
             const { data } = response;
-            setPost(data);
+            console.log(data);
+
+            setPost(data.postToPostCommentResponseDto);
             setComment('');
           })
           .catch((error) => alert(error));
@@ -95,33 +101,47 @@ function CommentModule({
           comments.map((comment) => (
             <CommentItem key={comment.id}>
               <RowDiv>
-                <div>like: {comment.likeCount} | </div>
-                <button>| like |</button>
-                <button>| unlike |</button>
-                <CommonButton
-                  buttonType={BUTTON_TYPE_USER_EDIT}
-                  cont={'Edit'}
-                  onClick={handleCommentEdit}
+                <img
+                  src={comment.userImageUrl}
+                  alt={'userImage'}
+                  onError={(e) => (e.target.src = NONE_IMG)}
+                  style={{ width: '30px', height: '30px' }}
                 />
-                <ModalCommentEdit
-                  commentEditModalIsOpen={commentEditModalIsOpen}
-                  setCommentEditModalOpen={setCommentEditModalOpen}
-                  postId={postId}
-                  comment={comment}
-                  setPost={setPost}
-                />
-                <CommonButton
-                  buttonType={BUTTON_TYPE_USER_DELETE}
-                  cont={'Delete'}
-                  onClick={handleCommentDelete}
-                />
-                <ModalCommentDelete
-                  commentDeleteModalIsOpen={commentDeleteModalIsOpen}
-                  setCommentDeleteModalOpen={setCommentDeleteModalOpen}
-                  postId={postId}
-                  commentId={comment.id}
-                  setPost={setPost}
-                />
+                <p>| {comment.userName} |</p>
+                <p>|</p>
+                <div>| like: {comment.likeCount} | </div>
+                {getIS_ALIVE() && getUser().id === comment.userId ? (
+                  <RowDiv>
+                    <button>| like |</button>
+                    <button>| unlike |</button>
+                    <CommonButton
+                      buttonType={BUTTON_TYPE_USER_EDIT}
+                      cont={'Edit'}
+                      onClick={handleCommentEdit}
+                    />
+                    <ModalCommentEdit
+                      commentEditModalIsOpen={commentEditModalIsOpen}
+                      setCommentEditModalOpen={setCommentEditModalOpen}
+                      postId={postId}
+                      comment={comment}
+                      setPost={setPost}
+                    />{' '}
+                    <CommonButton
+                      buttonType={BUTTON_TYPE_USER_DELETE}
+                      cont={'Delete'}
+                      onClick={handleCommentDelete}
+                    />
+                    <ModalCommentDelete
+                      commentDeleteModalIsOpen={commentDeleteModalIsOpen}
+                      setCommentDeleteModalOpen={setCommentDeleteModalOpen}
+                      postId={postId}
+                      commentId={comment.id}
+                      setPost={setPost}
+                    />
+                  </RowDiv>
+                ) : (
+                  ''
+                )}
               </RowDiv>
               <div>{comment.content}</div>
             </CommentItem>
@@ -199,7 +219,7 @@ const CommentArea = styled.ul`
 `;
 
 const CommentItem = styled.li`
-  border: 1px solid grey;
+  border-top: 1px solid hsl(210deg 8% 90%);
   margin: 4px;
 `;
 
