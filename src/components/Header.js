@@ -9,7 +9,8 @@ import StyledInput, { INPUT_TYPE_SEARCH } from '../components/StyledInput';
 import { ControlledMenu } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import NavSidebar from './NavSidebar';
-import { IS_ALIVE, logout } from '../util/tokenHelper';
+import { getUser, IS_ALIVE, logout } from '../util/tokenHelper';
+import { RowDiv } from '../styles/StyledStore';
 
 const HamburgerContainer = styled.div`
   display: ${(props) => (props.isBugerVisible ? 'inline-block' : 'none')};
@@ -17,6 +18,7 @@ const HamburgerContainer = styled.div`
 
 const NavigationContainer = styled.div`
   position: fixed;
+  z-index: 100;
   width: 100vw;
   background-color: #f8f9f9;
   display: flex;
@@ -68,17 +70,19 @@ const Logout = styled.button`
 
 /**
  * Created by @KimTank
- * @param { isOpen, setOpen, isBugerVisible, setIsBugerVisible }
+ * @param { isOpen, setOpen, isBugerVisible }
  * @returns <NavigationContainer>
  */
-function Header({ isOpen, setOpen, isBugerVisible, setIsBugerVisible }) {
+function Header({ isOpen, setOpen, isBugerVisible }) {
   const ref = useRef(null);
   const navigate = useNavigate();
   const outCo = 'https://stackoverflow.co/';
   const outCoTe = 'https://stackoverflow.co/teams/';
   const handleLogout = () => {
     //로그아웃 서버에 토큰저장안함.
+    console.log(`Header log out before: ${getUser()}`);
     logout();
+    console.log(`Header log out after: ${getUser()}`);
     navigate('/login');
   };
 
@@ -86,20 +90,25 @@ function Header({ isOpen, setOpen, isBugerVisible, setIsBugerVisible }) {
     <NavigationContainer>
       <Line />
       <Navigation>
-        <HamburgerContainer
-          ref={ref}
-          onPointerEnter={() => setOpen(true)}
-          isBugerVisible={isBugerVisible}
-        >
-          <Hamburger
-            toggled={isOpen}
-            toggle={setOpen}
-            size={16}
-            direction={'right'}
-            duration={0.1}
-            rounded
-          />
-        </HamburgerContainer>
+        {IS_ALIVE() ? (
+          <HamburgerContainer
+            ref={ref}
+            onPointerEnter={() => setOpen(true)}
+            isBugerVisible={isBugerVisible}
+          >
+            <Hamburger
+              toggled={isOpen}
+              toggle={setOpen}
+              size={16}
+              direction={'right'}
+              duration={0.1}
+              rounded
+            />
+          </HamburgerContainer>
+        ) : (
+          ''
+        )}
+
         <ControlledMenu
           state={isOpen ? 'open' : 'closed'}
           anchorRef={ref}
@@ -125,13 +134,16 @@ function Header({ isOpen, setOpen, isBugerVisible, setIsBugerVisible }) {
         <a href={outCoTe} style={{ margin: '0px 4px' }}>
           For Teams
         </a>
-        <Btn fill="true" to="login">
-          Log in
-        </Btn>
-        <Btn to="signup">Sign up</Btn>
-        {IS_ALIVE() ? <Logout onClick={handleLogout}>Log out</Logout> : ''}
-        <button onClick={() => setIsBugerVisible(!isBugerVisible)} />
-        <Link to="temp">임시</Link>
+        {IS_ALIVE() ? (
+          <Logout onClick={handleLogout}>Log out</Logout>
+        ) : (
+          <RowDiv>
+            <Btn fill="true" to="login">
+              Log in
+            </Btn>
+            <Btn to="signup">Sign up</Btn>
+          </RowDiv>
+        )}
       </Navigation>
       <Line grey={'true'} />
     </NavigationContainer>

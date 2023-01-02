@@ -1,8 +1,12 @@
-import Sidebar from '../components/Sidebar';
+import { useLocation } from 'react-router';
+import AskEdit from '../components/AskEdit';
+
+import AskEditScripts from '../components/AskEditScripts';
+
 import { MainContainer } from '../styles/StyledStore';
 
 /**
- * # QuestionEdit
+ * # QuestionCreate
  *
  * ## init
  *
@@ -14,15 +18,18 @@ import { MainContainer } from '../styles/StyledStore';
  *
  * ## description
  *
- * 질문 수정
+ * - 질문 리스트
+ * - nested route(중첩 라우트로 목록눌렀을 때 상세로 이동)
  *
- * @returns QuestionEdit
+ * @returns QuestionCreate
  */
 function QuestionEdit() {
+  const location = useLocation();
+
   return (
     <MainContainer>
-      <div>질문 수정</div>
-      <Sidebar />
+      <AskEdit post={location.state.post} />
+      <AskEditScripts />
     </MainContainer>
   );
 }

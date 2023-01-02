@@ -2,22 +2,35 @@ import styled from 'styled-components';
 import Editor from './Editors';
 import StyledInput from './StyledInput';
 import { Tag } from './Tag';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { pushDefaultWithToken } from '../util/axiosHelper';
+
+/*
+  "title": "질문글 제목입니다 ",
+  "content": " 질문글 내용입니다 ",
+  "createdAt": "2022-12-28T17:35:16.59537"
+*/
 
 /**
  * Created by @ldk199662
  * Modified by @KimTank
  * @returns <AskCreate>
  */
-function AskCreate() {
+function AskEdit({ post }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState([]);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(post);
+    setTitle(post.title);
+    setContent(post.content);
+    setTags(post.tags);
+  }, []);
 
   const onChangeTitle = (e) => {
     setTitle(e.target.value);
@@ -46,8 +59,8 @@ function AskCreate() {
     }
 
     axios
-      .post(
-        process.env.REACT_APP_EP_POSTS_CREATE,
+      .patch(
+        `${process.env.REACT_APP_EP_POSTS_EDIT}/${post.id}`,
         {
           title: title,
           content: content,
@@ -56,7 +69,7 @@ function AskCreate() {
         pushDefaultWithToken()
       )
       .then(() => {
-        navigate('/');
+        navigate(-1);
       })
       .catch((error) => {
         console.log(error);
@@ -76,7 +89,7 @@ function AskCreate() {
 
   return (
     <AskBody>
-      <AskTitleH1>Ask a public question</AskTitleH1>
+      <AskTitleH1>Edit Question</AskTitleH1>
       <AskTitle>
         <AskTitleH2>Writing a good question</AskTitleH2>
         <br />
@@ -131,6 +144,7 @@ function AskCreate() {
           Introduce the problem and expand on what you put in the title. Minimum
           20 characters.
         </p>
+
         <Editor value={content} setValue={onChangeContent} />
       </AskContent>
       {/* <AskExpect className="ask-expect">
@@ -169,7 +183,7 @@ function AskCreate() {
     </AskBody>
   );
 }
-export default AskCreate;
+export default AskEdit;
 
 const AskBody = styled.div`
   background-color: #f1f2f3;

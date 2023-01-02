@@ -6,7 +6,7 @@ import styled from 'styled-components';
  */
 function AskCreateScripts() {
   return (
-    <AskCreateScript>
+    <AskEditScript>
       <TitleScript>
         <h2>Writing a good title</h2>
         <p>
@@ -66,12 +66,12 @@ function AskCreateScripts() {
           </a>
         </p>
       </TagScript>
-    </AskCreateScript>
+    </AskEditScript>
   );
 }
 export default AskCreateScripts;
 
-const AskCreateScript = styled.div`
+const AskEditScript = styled.div`
   min-width: 300px;
   max-width: 300px;
   height: 100%;

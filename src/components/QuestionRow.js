@@ -1,36 +1,29 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-function QuestionRow() {
-  const [posts, setPosts] = useState([]);
+import { RowDiv } from '../styles/StyledStore';
 
+const Tag = styled.li`
+  padding: 4px 8px;
+  margin: 0px 2px;
+  background-color: #e1ecf4;
+  color: #39739d;
+  border-radius: 5px;
+`;
+
+/**
+ * Created by @ldk199662
+ * Modified by @KimTank
+ * @returns <QuestionRow>
+ */
+function QuestionRow({ posts = [] }) {
   const navigate = useNavigate();
-  useEffect(() => {
-    axios
-      .get('/board/posts', {
-        withCredentials: true,
-        params: {
-          page: 1,
-          size: 10,
-        },
-      })
-      .then((response) => {
-        const { data } = response;
-        console.log('Temp.js/Temp()/useEffect/data.data: ');
-        console.log(data.data);
-        console.log(`======================================`);
-        setPosts(data.data);
-      })
-      .catch((error) => alert(error));
-  }, []);
   return (
-    <>
+    <ul>
       {posts.length === 0 ? (
-        <div>not empty</div>
+        <div>Posts are empty</div>
       ) : (
         posts.map((post) => (
-          <div key={post.id}>
+          <li key={post.id}>
             <div
               role="presentation"
               onClick={() =>
@@ -55,31 +48,31 @@ function QuestionRow() {
                     <span>views</span>
                   </QuestionLists>
                 </QuestionStatus>
-
                 <QuestionTitleBody>
-                  <QuestionTitle>Title: {post.title}</QuestionTitle>
+                  <QuestionTitle>{post.title}</QuestionTitle>
                   <Info>
                     <QuestionTag>
                       {post.tags.length === 0 ? (
                         <p>No tags</p>
                       ) : (
-                        <p>data.tags[0]</p>
-                        // <ul>
-                        //   data.tags.map((tag, index) => (<li key={index}>tag</li>))
-                        // </ul>
+                        <RowDiv>
+                          {post.tags.map((tag, index) => (
+                            <Tag key={index}>{tag}</Tag>
+                          ))}
+                        </RowDiv>
                       )}
                     </QuestionTag>
                     <UserInfo>
-                      <ManAndWhen>Asked{post.createdAt}</ManAndWhen>
+                      <ManAndWhen>Asked {post.createdAt}</ManAndWhen>
                     </UserInfo>
                   </Info>
                 </QuestionTitleBody>
               </MainQuestionList>
             </div>
-          </div>
+          </li>
         ))
       )}
-    </>
+    </ul>
   );
 }
 
@@ -133,11 +126,8 @@ const QuestionTitle = styled.div`
 const QuestionTag = styled.span`
   display: inline-block;
   margin-right: 3px;
-  background-color: #e1ecf4;
   flex-direction: row;
-  color: #39739d;
   padding: 5px;
-  border-radius: 5px;
   font-size: 10px;
   margin-left: 160px;
 `;

@@ -1,47 +1,66 @@
-// import axios from 'axios';
-// import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { IS_ALIVE } from '../util/tokenHelper';
+import Pagination from './lib/Pagination';
 import QuestionRow from './QuestionRow';
 
 /**
- * Created by @SW
- * @returns <MainBody>
+ * - Created by @ldk199662
+ * - Modified by @KimTank 221231
+ * @returns <Main>
  */
 function Main() {
-  const Askbtn = useNavigate();
+  const [data, setData] = useState({ pageInfo: { totalElements: 0 } });
+  const [state, setState] = useState({ activePage: 1 });
+  const navigate = useNavigate();
 
-  const handleAskBtn = () => {
-    Askbtn('/questionCreate');
+  const linePageSizeNumber = 20;
+  //페이지가 변경될때
+  useEffect(() => {
+    axios
+      .get('/board/posts', {
+        withCredentials: true,
+        params: {
+          page: state.activePage,
+          size: linePageSizeNumber,
+        },
+      })
+      .then((response) => {
+        const { data } = response;
+        console.log(data);
+        setData(data);
+      })
+      .catch((error) => alert(error));
+  }, [state]);
+
+  const handlePageChange = (buttonNumber) => {
+    setState({ activePage: buttonNumber });
   };
 
-  // const [QuestionL, SetQuestionL] = useState([]);
-
-  // useEffect(() => {
-  //   axios
-  //     .get('board/posts?page=1&size=3', { withCredentials: true })
-  //     .then((res) => {
-  //       const { data } = res;
-  //       SetQuestionL(data);
-  //     })
-  //     .catch((error) => alert(error));
-  // }, []);
+  const handleAskBtn = () => {
+    navigate('/questionCreate');
+  };
 
   return (
     <MainBody>
       <MainTitle>
         <h2>Top Questions</h2>
-        <button onClick={() => handleAskBtn()}>Ask Question</button>
+        {IS_ALIVE() ? (
+          <button onClick={() => handleAskBtn()}>Ask Question</button>
+        ) : (
+          ''
+        )}
       </MainTitle>
-      {/* {QuestionL.map((list) => ( */}
-      <QuestionRow
-      // key={list.id}
-      // id={list.id}
-      // title={list.title}
-      // createdAt={list.createdAt}
-      // tag={list.tag}
+      <QuestionRow posts={data.data} />
+      <Pagination
+        activePage={state.activePage}
+        itemsCountPerPage={linePageSizeNumber}
+        totalItemsCount={data.pageInfo.totalElements}
+        pageRangeDisplayed={5}
+        onChange={handlePageChange}
       />
-      {/* ))} */}
     </MainBody>
   );
 }
@@ -57,7 +76,6 @@ const MainBody = styled.div`
 
 const MainTitle = styled.div`
   padding: 30px;
-  margin-right: 40px;
   border-bottom: 1px solid hsl(210deg 8% 90%);
   > h2 {
     font-weight: 500;
@@ -67,7 +85,7 @@ const MainTitle = styled.div`
     border-radius: 3px;
     border: none;
     color: #ffffff;
-    margin-left: 600px;
+    margin-left: 700px;
     margin-top: -60px;
     padding: 10px;
   }

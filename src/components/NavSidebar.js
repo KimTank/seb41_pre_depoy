@@ -8,13 +8,14 @@ import { ReactComponent as IconGlobe } from '../asset/icon/icon-globe.svg';
 const SidebarContainer = styled.div`
   display: flex;
   flex-direction: row;
+  background-color: white;
+  border: 1px solid gery;
 `;
 
 const Sidebar = styled.div`
   max-width: 170px;
   min-width: 170px;
   height: 100%;
-  background-color: white;
   padding-top: 24px;
   padding-bottom: 30px;
 `;
@@ -56,7 +57,7 @@ function NavSidebar() {
           <ul>
             <CommonLi>
               <IconGlobe width="20px" height="15px" />
-              <Link to="questions"> Questions</Link>
+              <Link to="/"> Questions</Link>
             </CommonLi>
             <SubLi>
               {/* <Link to="tags">Tags</Link> */}
